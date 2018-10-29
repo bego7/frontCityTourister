@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
-
+// import { LocalDataSource } from 'ng2-smart-table';
+import { HttpClient } from '@angular/common/http';
 import { SmartTableService } from '../../../@core/data/smart-table.service';
-
+import { ServerDataSource } from 'ng2-smart-table';
 @Component({
   selector: 'ngx-smart-table',
   templateUrl: './smart-table.component.html',
@@ -13,7 +13,8 @@ import { SmartTableService } from '../../../@core/data/smart-table.service';
   `],
 })
 export class SmartTableComponent {
-
+  // data:any = [];
+  // source: ServerDataSource;
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -34,38 +35,50 @@ export class SmartTableComponent {
         title: 'ID',
         type: 'number',
       },
-      firstName: {
-        title: 'First Name',
+      name: {
+        title: 'Nombre',
         type: 'string',
       },
-      lastName: {
-        title: 'Last Name',
-        type: 'string',
-      },
-      username: {
-        title: 'Username',
-        type: 'string',
-      },
+      
       email: {
-        title: 'E-mail',
+        title: 'Correo',
         type: 'string',
       },
-      age: {
-        title: 'Age',
-        type: 'number',
+
+      phone_number: {
+        title: 'Teléfono',
+        type: 'string',
       },
     },
+
   };
-
-  source: LocalDataSource = new LocalDataSource();
-
-  constructor(private service: SmartTableService) {
-    const data = this.service.getData();
-    this.source.load(data);
+  
+  source: ServerDataSource=new ServerDataSource(this.http, { endPoint: 'https://ertourister.appspot.com/user'});
+  // pager.display =false;
+  // source: LocalDataSource = new LocalDataSource();
+  usuarios: any;
+  constructor(private service: SmartTableService,private http: HttpClient) {
+    // const data = this.service.getUsuarios();
+    // this.source.load(data);
+    // this.source = new ServerDataSource(http, { endPoint: 'https://ertourister.appspot.com/user' });
   }
 
+  ngOnInit() {
+    // this.source = new ServerDataSource(this.http, { endPoint: 'https://ertourister.appspot.com/user'})
+    this.getUsuarios();
+  }
+
+  getUsuarios() {
+    this.service.getUsuarios().subscribe(res => {
+      this.usuarios = res;
+    });
+  }
+  
+    
+
+
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
+    if (window.confirm('¿Estas seguro que quieres eliminar?')) {
       event.confirm.resolve();
     } else {
       event.confirm.reject();
