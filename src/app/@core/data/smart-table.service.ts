@@ -13,11 +13,26 @@ export class SmartTableService {
     const uri = 'https://ertourister.appspot.com/user';
     return this
             .http
+            // me regresa un RxJS observable
             .get(uri)
-            // duda de para que chihuahuas es el map 
+            // map() method on the
+            // Observable to transform the response
+            //  from the API into an array of  objects:
             .map(res => {
               return res;
-              console.log(res);
+              
+            });
+  }
+
+  deleteUsuarios(id) {
+    const uri = 'https://ertourister.appspot.com/user/' + id;
+
+        return this
+            .http
+            // me regresa un RxJS observable
+            .delete(uri)
+            .map(res => {
+              return res;
             });
   }
 

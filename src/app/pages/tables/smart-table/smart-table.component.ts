@@ -16,6 +16,7 @@ export class SmartTableComponent {
   // data:any = [];
   // source: ServerDataSource;
   settings = {
+    // mode: 'external',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -32,9 +33,12 @@ export class SmartTableComponent {
     },
     columns: {
       id: {
-        title: 'ID',
-        type: 'number',
+        title:'id',
+        type:'number',
+        editable: false,
+        addable: false,
       },
+      
       name: {
         title: 'Nombre',
         type: 'string',
@@ -50,6 +54,7 @@ export class SmartTableComponent {
         type: 'string',
       },
     },
+   
 
   };
   
@@ -66,6 +71,7 @@ export class SmartTableComponent {
   ngOnInit() {
     // this.source = new ServerDataSource(this.http, { endPoint: 'https://ertourister.appspot.com/user'})
     this.getUsuarios();
+    console.log("cargo");
   }
 
   getUsuarios() {
@@ -75,11 +81,21 @@ export class SmartTableComponent {
   }
   
     
-
+  deleteUsuarios(id) {
+    this.service.deleteUsuarios(id).subscribe(res => {
+      console.log('Deleted');
+      console.log(id);
+    });
+  }
 
   onDeleteConfirm(event): void {
+    // console.log(event.data);
     if (window.confirm('¿Estas seguro que quieres eliminar?')) {
-      event.confirm.resolve();
+          console.log(event.id);
+          event.confirm.resolve(this.deleteUsuarios(event.data.id));
+          // console.log();
+          this.getUsuarios();
+      
     } else {
       event.confirm.reject();
     }
